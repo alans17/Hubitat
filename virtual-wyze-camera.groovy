@@ -1,7 +1,7 @@
 /**
  *  Virtual Wyze Camera
  *
- *  Copyright 2020 Alan Skinner
+ *  Copyright 2020 AlanS17
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at:
@@ -14,14 +14,14 @@
  */
 
 metadata {
-	definition (name: "Virtual Wyze Camera", namespace: "AlanS17", author: "Alan Skinner", cstHandler: true) {
-		capability "Sensor"
+	definition (name: "Virtual Wyze Camera", namespace: "AlanS17", author: "AlanS17", cstHandler: true) {
+        capability "Sensor"
         capability "MotionSensor"
-		capability "SoundSensor"
-		capability "SmokeDetector"
-		capability "CarbonMonoxideDetector"
+        capability "SoundSensor"
+        capability "SmokeDetector"
+        capability "CarbonMonoxideDetector"
         capability "Switch"
-		capability "Actuator"
+        capability "Actuator"
         
         command "motionOn"
         command "soundOn"
@@ -29,27 +29,19 @@ metadata {
         command "coOn"
 	}
 
-	simulator {
-		// TODO: define status and reply messages here
+preferences {
+	input name: "ResetInterval", type: "number", title: "Reset Interval", description: "Number of seconds before resetting sensor (Wyze updates every 300 seconds)",required: true, defaultValue: "10", range: "1..299"
+	input name: "descriptionTextEnable", type: "bool", title: "Enable descriptionText logging", defaultValue: true
 	}
-
-
-  preferences {
-    input name: "ResetInterval", type: "number", title: "Reset Interval", description: "Number of seconds before resetting sensor (Wyze updates every 300 seconds)",required: true, defaultValue: "1", range: "1..299"
-    input name: "descriptionTextEnable", type: "bool", title: "Enable descriptionText logging", defaultValue: true
-  }
 }
 
 // parse events into attributes
 def parse(String description) {
 	log.debug "Parsing '${description}'"
-	// TODO: handle 'contact' attribute
-	// TODO: handle 'switch' attribute
-
 }
 
 private logInfo(msg) {
-  if (descriptionTextEnable) log.info msg
+	if (descriptionTextEnable) log.info msg
 }
 
 // handle commands
@@ -57,7 +49,7 @@ def motionOn() {
 	logInfo("${device.name} motion active")
 	sendEvent(name: "switch", value: "on")
 	sendEvent(name: "motion", value: "active")
-    runIn(ResetInterval.toInteger(), motionOff)
+	runIn(ResetInterval.toInteger(), motionOff)
 }
 
 def motionOff() {
@@ -69,7 +61,7 @@ def soundOn() {
 	logInfo("${device.name} sound detected")
 	sendEvent(name: "switch", value: "on")
 	sendEvent(name: "sound", value: "detected")
-    runIn(ResetInterval.toInteger(), soundOff)
+	runIn(ResetInterval.toInteger(), soundOff)
 }
 
 def soundOff() {
@@ -81,7 +73,7 @@ def smokeOn() {
 	logInfo("${device.name} smoke detected")
 	sendEvent(name: "switch", value: "on")
 	sendEvent(name: "smoke", value: "detected")
-    runIn(ResetInterval.toInteger(), smokeOff)
+	runIn(ResetInterval.toInteger(), smokeOff)
 }
 
 def smokeOff() {
@@ -93,7 +85,7 @@ def coOn() {
 	logInfo("${device.name} carbon monoxide detected")
 	sendEvent(name: "switch", value: "on")
 	sendEvent(name: "co", value: "detected")
-    runIn(ResetInterval.toInteger(), coOff)
+	runIn(ResetInterval.toInteger(), coOff)
 }
 
 def coOff() {
